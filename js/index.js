@@ -111,9 +111,6 @@ function loadGLBFile() {
     const loaderManeger = new LoadingManager();
     loaderManeger.onLoad = () => {
         const gltfObj = scene.getObjectByName("GLTFFiles");
-        console.log(gltfObj);
-        // const obj = gltfObj.getObjectByName("Beta_Joints");
-        // console.log(obj);
         const box = new Box3();
         box.setFromObject(gltfObj);
         const center = box.getCenter(new Vector3());
@@ -123,6 +120,7 @@ function loadGLBFile() {
         sceneComponent.controls.update();
         sceneComponent.camera.updateMatrix();
         animate = true;
+        document.querySelector('.PageLoader').style.display = "none";
     }
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('./jsm/libs/DRACO/');
@@ -138,27 +136,13 @@ function loadGLBFile() {
         scene.add(obj.scene);
     }, (xhr) => {
         if (xhr.lengthComputable) {
-            var percentComplete = (xhr.loaded / xhr.total) * 100
-            document.getElementById("progresbar").textContent = percentComplete;
+            var percentComplete = (xhr.loaded / xhr.total) * 100;
+            document.getElementById("progresbar").textContent = "Prograss... " + percentComplete;
             console.log(percentComplete);
         }
     }, (error) => {
         console.log(error);
     });
-    // for (let i = 0; i < 100; i++) {
-    //     gltfLoader.load('../model/waking.glb', (obj) => {
-    //         obj.scene.name = "GLTFFiles" + i;
-    //         obj.scene.position.set(0, 0, i * .5);
-    //         scene.add(obj.scene);
-    //     }, (xhr) => {
-    //         if (xhr.lengthComputable) {
-    //             var percentComplete = (xhr.loaded / xhr.total) * 100
-    //             document.getElementById("progresbar").textContent = percentComplete;
-    //         }
-    //     }, (error) => {
-    //         console.log(error)
-    //     });
-    // }
 
 }
 
@@ -173,11 +157,15 @@ window.addEventListener('resize', () => {
     sceneComponent.camera.updateProjectionMatrix();
 });
 
+/**
+ * keydown event
+ */
 window.addEventListener('keydown', (e) => {
 
     switch (e.key) {
         case 'Escape':
             controlsMode = controlsModeOption.NONE;
+            animate = false;
             handleControlsMode();
             break;
 
@@ -187,9 +175,11 @@ window.addEventListener('keydown', (e) => {
 
 });
 
+// set controls options
 var controlsModeOption = Object.freeze({ NONE: -1, ROTATE: 0, ZOOM: 1, PAN: 2 });
 var controlsMode = controlsModeOption.NONE;
 
+// add event listener to click on Rotation button to active Rotation controls
 domElement = document.getElementById("Rotation");
 if (domElement) {
     domElement.addEventListener('click', () => {
@@ -198,6 +188,7 @@ if (domElement) {
     });
 }
 
+// add event listener to click on Zoom button to active Zoom controls
 domElement = document.getElementById("Zoom");
 if (domElement) {
     domElement.addEventListener('click', () => {
@@ -206,6 +197,7 @@ if (domElement) {
     });
 }
 
+// add event listener to click on Pan button to active Pan controls
 domElement = document.getElementById("Pan");
 if (domElement) {
     domElement.addEventListener('click', () => {
@@ -214,6 +206,7 @@ if (domElement) {
     });
 }
 
+// handle controls mode using mouse like rotate, zoom, pan.
 function handleControlsMode() {
     const Rotation = document.getElementById("Rotation");
     const Zoom = document.getElementById("Zoom");
@@ -253,11 +246,12 @@ function handleControlsMode() {
             sceneComponent.controls.enableRotate = false;
             sceneComponent.controls.enableZoom = false;
             sceneComponent.controls.enablePan = true;
-            sceneComponent.controls.setMouseAction('PAN', 0);;
+            sceneComponent.controls.setMouseAction('PAN', 0);
             break;
     }
 }
 
+// set auto rotation stop
 sceneComponent.renderer.domElement.addEventListener('mousedown', () => {
     animate = false;
 });
@@ -277,9 +271,7 @@ function helpertPoint(position = new Vector3(), radius = 2) {
     scene.add(point);
 }
 
-/**
- * Animation Frame
- */
+// Animation Frame
 function animation() {
     requestAnimationFrame(animation);
     sceneComponent.status.update();

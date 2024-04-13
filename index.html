@@ -12,16 +12,22 @@
             box-sizing: border-box;
         }
 
+        .PageLoader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #ababab;
+            position: absolute;
+            font-size: 100px;
+            width: 100%;
+            height: 100vh;
+            z-index: 90000;
+        }
+
         #canvas {
             width: 100%;
             height: 100vh;
             background: #ababab;
-        }
-
-        #progresbar {
-            position: absolute;
-            top: 0;
-            right: 0;
         }
 
         .btns {
@@ -50,13 +56,15 @@
 </head>
 
 <body>
+    <div class="PageLoader">
+        <div id="progresbar"></div>
+    </div>
     <div class="discription">
         <p>
             "<b>Escape</b>" to cancel controls event <br>
         </p>
     </div>
     <div id="canvas"></div>
-    <div id="progresbar"></div>
     <div class="btns">
         <input type="button" id="Rotation" value="Rotation">
         <input type="button" id="Zoom" value="zoom in zoom out">
