@@ -49,10 +49,13 @@ function setSceneComponent(anyTagToSetScene, scene) {
     anyTagToSetScene.appendChild(renderer.domElement);
 
     const status = new Stats();
-    status.dom.children[0].style.display = "block";
-    status.dom.children[1].style.display = "block";
-    status.dom.children[2].style.display = "block";
     anyTagToSetScene.appendChild(status.dom);
+    if (status.dom.children[0])
+        status.dom.children[0].style.display = "block";
+    if (status.dom.children[1])
+        status.dom.children[1].style.display = "block";
+    if (status.dom.children[2])
+        status.dom.children[2].style.display = "block";
 
     camera = new PerspectiveCamera(
         75, anyTagToSetScene.clientWidth / anyTagToSetScene.clientHeight,
